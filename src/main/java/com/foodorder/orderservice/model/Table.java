@@ -20,6 +20,5 @@ public class Table {
     private Long id;
     private int number;
 
-    @OneToOne
-    private Order order;
+
 }
