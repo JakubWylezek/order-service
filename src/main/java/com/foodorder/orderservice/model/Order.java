@@ -1,7 +1,8 @@
 package com.foodorder.orderservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,26 +12,28 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name = "orders")
 @Data
-@EqualsAndHashCode(exclude = {"Food", "Table"})
+@JsonIgnoreProperties
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
+    private LocalDate orderDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Table table;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "food_order",
-            joinColumns = @JoinColumn(name = "food_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<Food> food;
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "food_id"))
+    private List<Food> foods;
 
 }
