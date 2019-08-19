@@ -1,5 +1,6 @@
 package com.foodorder.orderservice.service;
 
+import com.foodorder.orderservice.exception.custom.OrderNotFoundException;
 import com.foodorder.orderservice.model.Order;
 import com.foodorder.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ public class OrderService {
     private TableService tableService;
 
     public Order getOrderById(Long id) {
-        return orderRepository.findById(id).get();
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     public List<Order> getOrdersByDate(LocalDate dateFrom, LocalDate dateTo) {
